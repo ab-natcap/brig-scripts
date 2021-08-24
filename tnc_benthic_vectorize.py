@@ -67,37 +67,71 @@ def proj_polys(layername):
                                          target_projection_wkt=outWKT,
                                          target_path=out_vector_path)
 
+# Not Resampled
+in_rasters = (
+    'benhab_03042021_tnc_reef.tif',
+    'benhab_03042021_tnc_coralalg.tif',
+    'benhab_03042021_tnc_spurgrv.tif',
+    'benhab_03042021_tnc_seagrass.tif'
+)
+out_layers = (
+    'tnc_reef_poly',
+    'tnc_coralalg_poly',
+    'tnc_spurgrv_poly',
+    'tnc_seagrass_poly'
+)
+
+# 12m Resampled
+in_rasters = (
+    'benhab_03042021_tnc_reef_12m.tif',
+    'benhab_03042021_tnc_coralalg_12m.tif',
+    'benhab_03042021_tnc_spurgrv_12m.tif',
+    'benhab_03042021_tnc_seagrass_12m.tif'
+)
+out_layers = (
+    'tnc_reef_poly_12m',
+    'tnc_coralalg_poly_12m',
+    'tnc_spurgrv_poly_12m',
+    'tnc_seagrass_poly_12m'
+)
+
+for in_raster, out_layer in zip(in_rasters, out_layers):
+    start_time = time.time()
+    print("Vectorizing ", in_raster, " to", out_layer)
+    make_polys(in_raster, out_layer)
+    print("Projecting", out_layer, " to UTM 18N")
+    proj_polys(out_layer)
+    print("Processing time: {0}".format(time_elapsed(start_time)))
 
 
 
-# Reef
-start_time = time.time()
-reef_raster = 'benhab_03042021_tnc_reef.tif'
-reef_layer = 'tnc_reef_poly'
-# make_polys(reef_raster, reef_layer)
-proj_polys(reef_layer)
-print("Processing time: {0}".format(time_elapsed(start_time)))
-
-# Coral / Algae
-start_time = time.time()
-coralalg_raster = 'benhab_03042021_tnc_coralalg.tif'
-coralalg_layer = 'tnc_coralalg_poly'
-# make_polys(coralalg_raster, coralalg_layer)
-proj_polys(coralalg_layer)
-print("Processing time: {0}".format(time_elapsed(start_time)))
-
-# Spur and Groove
-start_time = time.time()
-spurgrv_raster = 'benhab_03042021_tnc_spurgrv.tif'
-spurgrv_layer = 'tnc_spurgrv_poly'
-# make_polys(spurgrv_raster, spurgrv_layer)
-proj_polys(spurgrv_layer)
-print("Processing time: {0}".format(time_elapsed(start_time)))
-
-# Seagrass
-start_time = time.time()
-seagrass_raster = 'benhab_03042021_tnc_seagrass.tif'
-seagrass_layer = 'tnc_seagrass_poly'
-# make_polys(seagrass_raster, seagrass_layer)
-proj_polys(seagrass_layer)
-print("Processing time: {0}".format(time_elapsed(start_time)))
+# start_time = time.time()
+# reef_raster = 'benhab_03042021_tnc_reef.tif'
+# reef_layer = 'tnc_reef_poly'
+# # make_polys(reef_raster, reef_layer)
+# proj_polys(reef_layer)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
+#
+# # Coral / Algae
+# start_time = time.time()
+# coralalg_raster = 'benhab_03042021_tnc_coralalg.tif'
+# coralalg_layer = 'tnc_coralalg_poly'
+# # make_polys(coralalg_raster, coralalg_layer)
+# proj_polys(coralalg_layer)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
+#
+# # Spur and Groove
+# start_time = time.time()
+# spurgrv_raster = 'benhab_03042021_tnc_spurgrv.tif'
+# spurgrv_layer = 'tnc_spurgrv_poly'
+# # make_polys(spurgrv_raster, spurgrv_layer)
+# proj_polys(spurgrv_layer)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
+#
+# # Seagrass
+# start_time = time.time()
+# seagrass_raster = 'benhab_03042021_tnc_seagrass.tif'
+# seagrass_layer = 'tnc_seagrass_poly'
+# # make_polys(seagrass_raster, seagrass_layer)
+# proj_polys(seagrass_layer)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
