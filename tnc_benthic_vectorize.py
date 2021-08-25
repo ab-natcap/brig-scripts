@@ -95,6 +95,20 @@ out_layers = (
     'tnc_seagrass_poly_12m'
 )
 
+# 20m Resampled
+in_rasters = (
+    'benhab_03042021_tnc_reef_20m.tif',
+    'benhab_03042021_tnc_coralalg_20m.tif',
+    'benhab_03042021_tnc_spurgrv_20m.tif',
+    'benhab_03042021_tnc_seagrass_20m.tif'
+)
+out_layers = (
+    'tnc_reef_poly_20m',
+    'tnc_coralalg_poly_20m',
+    'tnc_spurgrv_poly_20m',
+    'tnc_seagrass_poly_20m'
+)
+
 for in_raster, out_layer in zip(in_rasters, out_layers):
     start_time = time.time()
     print("Vectorizing ", in_raster, " to", out_layer)

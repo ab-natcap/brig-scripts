@@ -54,6 +54,7 @@ def time_elapsed(start_time):
 
 in_raster = 'bh_benhab_03042021_merge_gridcode.tif'
 in_raster = 'bh_benhab_03042021_merge_gridcode_12m.tif'
+in_raster = 'bh_benhab_03042021_merge_gridcode_20m.tif'
 in_raster_path = os.path.join(data_dir, in_raster)
 
 # Reef
@@ -66,6 +67,7 @@ reef_vm = {
 }
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef.tif')
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef_12m.tif')
+out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef_20m.tif')
 
 print("Processing Reef classes")
 pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
@@ -88,6 +90,7 @@ coralalg_vm = {
 }
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg.tif')
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg_12m.tif')
+out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg_20m.tif')
 
 print("Processing Coral/Algae class")
 pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
@@ -111,6 +114,7 @@ spurgrv_vm = {
 }
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv.tif')
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv_12m.tif')
+out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv_20m.tif')
 
 print("Processing Spur and Groove Reef class")
 pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
@@ -142,6 +146,8 @@ seagrass_vm = {
 }
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass.tif')
 out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass_12m.tif')
+out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass_20m.tif')
+
 print("Processing Seagrass classes")
 pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
                                       target_raster_path=(out_raster_path),
