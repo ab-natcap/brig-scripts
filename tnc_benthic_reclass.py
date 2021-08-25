@@ -1,3 +1,10 @@
+# tnc_benthic_reclass.py
+# Reclass TNC benthic raster into individual habitat type rasters
+# Mask seagrass by distance from shore points (because it's too large to run in CV model otherwise)
+# Second step of TNC Data processing - run after tnc_benthic_resample.py
+
+
+
 import os
 import numpy as np
 import xarray as xr
@@ -157,3 +164,28 @@ pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
                                       values_required=False,
                                       )
 print("Processing time: {0}".format(time_elapsed(start_time)))
+
+print("Masking Seagrass raster", out_raster_path)
+
+# Mask Seagrass Raster
+# Use the Shore Points from Bahamas CV run to create 1 km buffer for mask
+start_time = time.time()
+
+seagrass_raster_path = out_raster_path
+shoreline_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km.shp')
+projected_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km_lambert.shp')
+masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_masked1k.tif')
+masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_12m_masked1k.tif')
+masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_20m_masked1k.tif')
+
+raster_wkt = pygeo.geoprocessing.get_raster_info(seagrass_raster_path)['projection_wkt']
+pygeo.geoprocessing.reproject_vector(
+    shoreline_buffer_path, raster_wkt, projected_buffer_path)
+
+pygeo.geoprocessing.mask_raster(
+    (seagrass_raster_path, 1),
+    projected_buffer_path,
+    masked_seagrass_raster_path)
+
+print("Processing time: {0}".format(time_elapsed(start_time)))
+

@@ -1,3 +1,7 @@
+# tnc_benthic_vectorize.py
+# Convert TNC benthic habitat from raster to vector & reproject the vector layer
+# Third step of TNC Data processing - run after tnc_benthic_reclass.py
+
 # https://www.e-education.psu.edu/geog489/node/2215
 # https://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html#polygonize-a-raster-band
 
@@ -109,6 +113,18 @@ out_layers = (
     'tnc_seagrass_poly_20m'
 )
 
+# Masked Seagrass only
+in_rasters = (
+    'benhab_03042021_tnc_seagrass_masked1k.tif',
+    'benhab_03042021_tnc_seagrass_12m_masked1k.tif',
+    'benhab_03042021_tnc_seagrass_20m_masked1k.tif',
+)
+out_layers = (
+    'tnc_seagrass_poly_masked1k',
+    'tnc_seagrass_poly_12m_masked1k',
+    'tnc_seagrass_poly_20m_masked1k',
+)
+
 for in_raster, out_layer in zip(in_rasters, out_layers):
     start_time = time.time()
     print("Vectorizing ", in_raster, " to", out_layer)
@@ -116,36 +132,3 @@ for in_raster, out_layer in zip(in_rasters, out_layers):
     print("Projecting", out_layer, " to UTM 18N")
     proj_polys(out_layer)
     print("Processing time: {0}".format(time_elapsed(start_time)))
-
-
-
-# start_time = time.time()
-# reef_raster = 'benhab_03042021_tnc_reef.tif'
-# reef_layer = 'tnc_reef_poly'
-# # make_polys(reef_raster, reef_layer)
-# proj_polys(reef_layer)
-# print("Processing time: {0}".format(time_elapsed(start_time)))
-#
-# # Coral / Algae
-# start_time = time.time()
-# coralalg_raster = 'benhab_03042021_tnc_coralalg.tif'
-# coralalg_layer = 'tnc_coralalg_poly'
-# # make_polys(coralalg_raster, coralalg_layer)
-# proj_polys(coralalg_layer)
-# print("Processing time: {0}".format(time_elapsed(start_time)))
-#
-# # Spur and Groove
-# start_time = time.time()
-# spurgrv_raster = 'benhab_03042021_tnc_spurgrv.tif'
-# spurgrv_layer = 'tnc_spurgrv_poly'
-# # make_polys(spurgrv_raster, spurgrv_layer)
-# proj_polys(spurgrv_layer)
-# print("Processing time: {0}".format(time_elapsed(start_time)))
-#
-# # Seagrass
-# start_time = time.time()
-# seagrass_raster = 'benhab_03042021_tnc_seagrass.tif'
-# seagrass_layer = 'tnc_seagrass_poly'
-# # make_polys(seagrass_raster, seagrass_layer)
-# proj_polys(seagrass_layer)
-# print("Processing time: {0}".format(time_elapsed(start_time)))

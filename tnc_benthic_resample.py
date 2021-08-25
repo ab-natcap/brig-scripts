@@ -1,5 +1,8 @@
 # tnc_benthic_resample.py
+# Downsample TNC benthic habitats from 4m to 12m and 20m resolution
+# First step of TNC Data processing
 # 2021-08-24
+
 import os
 
 # working locally to minimize Google Drive synchronizing delays (if any)
