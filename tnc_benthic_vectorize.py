@@ -129,9 +129,21 @@ for in_raster, out_layer in zip(in_rasters, out_layers):
 # print("Processing time: {0}".format(time_elapsed(start_time)))
 #
 # # Seagrass
-# start_time = time.time()
-# seagrass_raster = 'benhab_03042021_tnc_seagrass.tif'
-# seagrass_layer = 'tnc_seagrass_poly'
-# # make_polys(seagrass_raster, seagrass_layer)
+start_time = time.time()
+seagrass_raster = 'benhab_03042021_tnc_seagrass.tif'
+seagrass_layer = 'tnc_seagrass_poly'
+shoreline_buffer_path = 'shore_points_buffer_1km.shp'
+projected_buffer_path = 'shore_points_buffer_1km_lambert.shp'
+masked_seagrass_raster_path = '../masked_seagrass_1km.tif'
+
+raster_wkt = pygeo.get_raster_info(seagrass_raster)['projection_wkt']
+pygeo.reproject_vector(
+    shoreline_buffer_path, raster_wkt, projected_buffer_path)
+
+pygeo.mask_raster(
+    (seagrass_raster, 1),
+    projected_buffer_path,
+    masked_seagrass_raster_path)
+# make_polys(masked_seagrass_raster_path, seagrass_layer)
 # proj_polys(seagrass_layer)
-# print("Processing time: {0}".format(time_elapsed(start_time)))
+print("Processing time: {0}".format(time_elapsed(start_time)))
