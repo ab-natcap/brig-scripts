@@ -125,6 +125,14 @@ out_layers = (
     'tnc_seagrass_poly_20m_masked1k',
 )
 
+in_rasters = (
+    'benhab_03042021_tnc_seagrass_20m_masked1k_noMPAs_designated.tif',
+)
+out_layers = (
+    'tnc_seagrass_poly_20m_masked1k_noMPAs_designated',
+)
+
+
 for in_raster, out_layer in zip(in_rasters, out_layers):
     start_time = time.time()
     print("Vectorizing ", in_raster, " to", out_layer)
