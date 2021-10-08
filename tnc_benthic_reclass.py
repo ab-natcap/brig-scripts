@@ -3,14 +3,12 @@
 # Mask seagrass by distance from shore points (because it's too large to run in CV model otherwise)
 # Second step of TNC Data processing - run after tnc_benthic_resample.py
 
+# import os
+# import numpy as np
+# import xarray as xr
+# import rioxarray as rxr
 
-
-import os
-import numpy as np
-import xarray as xr
-import rioxarray as rxr
-
-data_dir = '/Users/arbailey/natcap/brigbh2021/data/tnc/benthic'
+# data_dir = '/Users/arbailey/natcap/brigbh2021/data/tnc/benthic'
 
 #### --- USING RIOXARRAY  --- Needs too much memory
 #######  Process finished with exit code 137 (interrupted by signal 9: SIGKILL)
@@ -44,6 +42,7 @@ data_dir = '/Users/arbailey/natcap/brigbh2021/data/tnc/benthic'
 
 #### ---- USING pygeoprocessing
 
+import os
 from osgeo import gdal
 import pygeoprocessing as pygeo
 import time
@@ -59,10 +58,32 @@ def time_elapsed(start_time):
     # print(str(datetime.timedelta(seconds=te)))
     return str(datetime.timedelta(seconds=te))
 
-in_raster = 'bh_benhab_03042021_merge_gridcode.tif'
-in_raster = 'bh_benhab_03042021_merge_gridcode_12m.tif'
-in_raster = 'bh_benhab_03042021_merge_gridcode_20m.tif'
-in_raster_path = os.path.join(data_dir, in_raster)
+def raster_reclass(source_path, reclassed_path, value_map):
+    """
+
+    :param source_path: input raster full path
+    :param reclassed_path: output (reclassified)
+    :param value_map: value map for the reclassification
+    :return:
+    """
+    print("Reclassifying {0} to {1}", (source_path, reclassed_path))
+    pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(source_path, 1),
+                                          target_raster_path=(reclassed_path),
+                                          value_map=value_map,
+                                          target_datatype=gdal.GDT_Byte,
+                                          target_nodata=0,
+                                          values_required=False,
+                                          )
+
+data_dir = '/Users/arbailey/natcap/brigbh2021/data/tnc/benthic'
+
+# Source Rasters -- various resampled resolutions
+in_raster_4m = 'bh_benhab_03042021_merge_gridcode.tif'
+in_raster_12m = 'bh_benhab_03042021_merge_gridcode_12m.tif'
+in_raster_20m = 'bh_benhab_03042021_merge_gridcode_20m.tif'
+in_raster_paths = [os.path.join(data_dir, rast) for rast in (in_raster_4m,
+                                                             in_raster_12m,
+                                                             in_raster_20m)]
 
 # Reef
 start_time = time.time()
@@ -72,19 +93,15 @@ reef_vm = {
     2: 1,
     3: 1,
 }
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef_12m.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_reef_20m.tif')
+out_reef_paths = [os.path.join(data_dir, rast) for rast in ('benhab_03042021_tnc_reef.tif',
+                                                            'benhab_03042021_tnc_reef_12m.tif',
+                                                            'benhab_03042021_tnc_reef_20m.tif')]
+# print("Processing Reef classes")
+# for in_rast_path, out_rast_path in zip(in_raster_paths, out_reef_paths):
+#     print(in_rast_path, out_rast_path)
+#     raster_reclass(in_rast_path, out_rast_path, reef_vm)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
 
-print("Processing Reef classes")
-pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
-                                      target_raster_path=(out_raster_path),
-                                      value_map=reef_vm,
-                                      target_datatype=gdal.GDT_Byte,
-                                      target_nodata=0,
-                                      values_required=False,
-                                      )
-print("Processing time: {0}".format(time_elapsed(start_time)))
 
 # Coral/Algae
 start_time = time.time()
@@ -95,19 +112,15 @@ coralalg_vm = {
     3: 0,
     4: 2,
 }
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg_12m.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_coralalg_20m.tif')
+out_coralalg_paths = [os.path.join(data_dir, rast) for rast in ('benhab_03042021_tnc_coralalg.tif',
+                                                            'benhab_03042021_tnc_coralalg_12m.tif',
+                                                            'benhab_03042021_tnc_coralalg_20m.tif')]
+# print("Processing Coral/Algae class")
+# for in_rast_path, out_rast_path in zip(in_raster_paths, out_coralalg_paths):
+#     print(in_rast_path, out_rast_path)
+#     raster_reclass(in_rast_path, out_rast_path, coralalg_vm)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
 
-print("Processing Coral/Algae class")
-pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
-                                      target_raster_path=(out_raster_path),
-                                      value_map=coralalg_vm,
-                                      target_datatype=gdal.GDT_Byte,
-                                      target_nodata=0,
-                                      values_required=False,
-                                      )
-print("Processing time: {0}".format(time_elapsed(start_time)))
 
 # Spur and Groove Coral
 start_time = time.time()
@@ -119,19 +132,15 @@ spurgrv_vm = {
     4: 0,
     5: 3,
 }
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv_12m.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_spurgrv_20m.tif')
+out_spurgrv_paths = [os.path.join(data_dir, rast) for rast in ('benhab_03042021_tnc_spurgrv.tif',
+                                                            'benhab_03042021_tnc_spurgrv_12m.tif',
+                                                            'benhab_03042021_tnc_spurgrv_20m.tif')]
+# print("Processing Spur and Groove Reef class")
+# for in_rast_path, out_rast_path in zip(in_raster_paths, out_spurgrv_paths):
+#     print(in_rast_path, out_rast_path)
+#     raster_reclass(in_rast_path, out_rast_path, spurgrv_vm)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
 
-print("Processing Spur and Groove Reef class")
-pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
-                                      target_raster_path=(out_raster_path),
-                                      value_map=spurgrv_vm,
-                                      target_datatype=gdal.GDT_Byte,
-                                      target_nodata=0,
-                                      values_required=False,
-                                      )
-print("Processing time: {0}".format(time_elapsed(start_time)))
 
 # Seagrass
 start_time = time.time()
@@ -151,41 +160,58 @@ seagrass_vm = {
     12: 4,
     13: 4,
 }
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass_12m.tif')
-out_raster_path = os.path.join(data_dir, 'benhab_03042021_tnc_seagrass_20m.tif')
+out_seagrass_paths = [os.path.join(data_dir, rast) for rast in ('benhab_03042021_tnc_seagrass.tif',
+                                                            'benhab_03042021_tnc_seagrass_12m.tif',
+                                                            'benhab_03042021_tnc_seagrass_20m.tif')]
+# print("Processing Seagrass classes")
+# for in_rast_path, out_rast_path in zip(in_raster_paths, out_seagrass_paths):
+#     print(in_rast_path, out_rast_path)
+#     raster_reclass(in_rast_path, out_rast_path, seagrass_vm)
+# print("Processing time: {0}".format(time_elapsed(start_time)))
 
-print("Processing Seagrass classes")
-pygeo.geoprocessing.reclassify_raster(base_raster_path_band=(in_raster_path,1),
-                                      target_raster_path=(out_raster_path),
-                                      value_map=seagrass_vm,
-                                      target_datatype=gdal.GDT_Byte,
-                                      target_nodata=0,
-                                      values_required=False,
-                                      )
-print("Processing time: {0}".format(time_elapsed(start_time)))
+#
+# print("Masking Seagrass raster", out_raster_path)
+#
+# # Mask Seagrass Raster
+# # Use the Shore Points from Bahamas CV run to create 1 km buffer for mask
+# start_time = time.time()
+#
+# seagrass_raster_path = out_raster_path
+# shoreline_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km.shp')
+# projected_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km_lambert.shp')
+# masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_masked1k.tif')
+# masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_12m_masked1k.tif')
+# masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_20m_masked1k.tif')
+#
+# raster_wkt = pygeo.geoprocessing.get_raster_info(seagrass_raster_path)['projection_wkt']
+# pygeo.geoprocessing.reproject_vector(
+#     shoreline_buffer_path, raster_wkt, projected_buffer_path)
+#
+# pygeo.geoprocessing.mask_raster(
+#     (seagrass_raster_path, 1),
+#     projected_buffer_path,
+#     masked_seagrass_raster_path)
+#
+# print("Processing time: {0}".format(time_elapsed(start_time)))
 
-print("Masking Seagrass raster", out_raster_path)
-
-# Mask Seagrass Raster
-# Use the Shore Points from Bahamas CV run to create 1 km buffer for mask
+# Macroalgae
 start_time = time.time()
-
-seagrass_raster_path = out_raster_path
-shoreline_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km.shp')
-projected_buffer_path = os.path.join(data_dir,'shore_points_buffer_1km_lambert.shp')
-masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_masked1k.tif')
-masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_12m_masked1k.tif')
-masked_seagrass_raster_path = os.path.join(data_dir,'benhab_03042021_tnc_seagrass_20m_masked1k.tif')
-
-raster_wkt = pygeo.geoprocessing.get_raster_info(seagrass_raster_path)['projection_wkt']
-pygeo.geoprocessing.reproject_vector(
-    shoreline_buffer_path, raster_wkt, projected_buffer_path)
-
-pygeo.geoprocessing.mask_raster(
-    (seagrass_raster_path, 1),
-    projected_buffer_path,
-    masked_seagrass_raster_path)
-
+# value map
+algae_vm = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 6,
+    7: 5,
+}
+out_algae_paths = [os.path.join(data_dir, rast) for rast in ('benhab_03042021_tnc_algae.tif',
+                                                            'benhab_03042021_tnc_algae_12m.tif',
+                                                            'benhab_03042021_tnc_algae_20m.tif')]
+print("Processing Macroalgae classed")
+for in_rast_path, out_rast_path in zip(in_raster_paths, out_algae_paths):
+    print(in_rast_path, out_rast_path)
+    raster_reclass(in_rast_path, out_rast_path, algae_vm)
 print("Processing time: {0}".format(time_elapsed(start_time)))
 
