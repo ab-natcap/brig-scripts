@@ -132,6 +132,17 @@ out_layers = (
     'tnc_seagrass_poly_20m_masked1k_noMPAs_designated',
 )
 
+#Macroalgae
+in_rasters = (
+    'benhab_03042021_tnc_algae.tif',
+    'benhab_03042021_tnc_algae_12m.tif',
+    'benhab_03042021_tnc_algae_20m.tif',
+)
+out_layers = (
+    'tnc_algae_poly',
+    'tnc_algae_poly_12m',
+    'tnc_algae_poly_20m',
+)
 
 for in_raster, out_layer in zip(in_rasters, out_layers):
     start_time = time.time()
