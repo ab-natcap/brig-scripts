@@ -4,8 +4,8 @@
 # Bathymetry
 # source data, GEBCO 2014
 #  https://www.gebco.net/data_and_products/historical_data_sets/#gebco_2014
-cd ‘/Users/arbailey/Google Drive/Shared drives/brigBH2021/data/source/gebco/GEBCO_2014’
-gdal_translate -projwin -81.153002 27.946190 -71.277237 20.334728 GEBCO_2014_2D.nc gebco_2014_bahamas.tif
+cd '/Users/arbailey/Google Drive/Shared drives/brigBH2021/data/source/gebco/GEBCO_2014'
+gdal_translate -projwin -81.25 28.50 -71.00 20.25 GEBCO_2014_2D.nc gebco_2014_bahamas.tif
 gdalwarp -overwrite -r bilinear -s_srs EPSG:4326 -t_srs EPSG:32618 -tr 900 900 gebco_2014_bahamas.tif /Users/arbailey/Google\ Drive/Shared\ drives/brigBH2021/data/work/bathytopo/gebco_2014_bahamas_32618.tif
 
 
