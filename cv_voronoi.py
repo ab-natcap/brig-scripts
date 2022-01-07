@@ -13,10 +13,11 @@ from shapely.ops import cascaded_union
 base_dir = '/Users/arbailey/Google Drive/Shared drives/brigBH2021/models/CoastalVulnerability'
 
 # Bahamas-wide with ALL Habitats
-ce_layer = 'coastal_exposure_all_habitat'
-cv_workspace = os.path.join(base_dir, 'CV_outputs', 'CVoutputs_AllHabitat_20210830')
+ce_layer = 'baseline_coastal_exposure_Dec2021'  #'coastal_exposure_all_habitat'
+ce_geopackage = 'coastal_exposure'
+cv_workspace = os.path.join(base_dir, 'CV_outputs', 'CV_outputs_Jan2022_WORKING', 'CV_baseline_v2_Dec2021')
 scratch_path = os.path.join(base_dir, 'scratch')
-coastal_exposure_gpkg = "{0}/{1}.gpkg".format(cv_workspace,ce_layer)
+coastal_exposure_gpkg = "{0}/{1}.gpkg".format(cv_workspace, ce_geopackage)
 voronoi_gpkg = os.path.join(cv_workspace, 'cv_voronoi.gpkg')
 voronoipoly_path= "{0}/{1}_voronoi.shp".format(cv_workspace,ce_layer)
 voronoiatt_layer= "{0}_voronoi_att".format(ce_layer)
