@@ -71,9 +71,9 @@ rm intermediate.tif
 
 
 ## Reproject to EPSG:32618 (UTM18N, WGS-84)
-gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_general_2020_zeros.tif fbd4g_bhs_general_2020_zeros_326818.tif
-gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_children_under_five_2020_zeros.tif fbd4g_bhs_children_under_five_2020_zeros_326818.tif
-gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_elderly_60_plus_2020_zeros.tif fbd4g_bhs_elderly_60_plus_2020_zeros_326818.tif
+gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_general_2020_zeros.tif fbd4g_bhs_general_2020_zeros_32618.tif
+gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_children_under_five_2020_zeros.tif fbd4g_bhs_children_under_five_2020_zeros_32618.tif
+gdalwarp -overwrite -r near -t_srs EPSG:32618 -co TILED=YES -co COMPRESS=LZW fbd4g_bhs_elderly_60_plus_2020_zeros.tif fbd4g_bhs_elderly_60_plus_2020_zeros_32618.tif
 
 
 ## Clip raster to include only area within 2km of shoreline as in 2017 analysis python notebook
@@ -81,17 +81,17 @@ gdalwarp -overwrite \
   -cutline ../shoreline/coastline_extract_2km_buffer.shp \
   -wo CUTLINE_ALL_TOUCHED=TRUE \
   -co TILED=YES -co COMPRESS=LZW \
-  fbd4g_bhs_general_2020_zeros_326818.tif fbd4g_bhs_general_2020_zeros_2kmbuff_32618.tif
+  fbd4g_bhs_general_2020_zeros_32618.tif fbd4g_bhs_general_2020_zeros_2kmbuff_32618.tif
 
 gdalwarp -overwrite \
   -cutline ../shoreline/coastline_extract_2km_buffer.shp \
   -wo CUTLINE_ALL_TOUCHED=TRUE \
   -co TILED=YES -co COMPRESS=LZW \
-  fbd4g_bhs_children_under_five_2020_zeros_326818.tif fbd4g_bhs_children_under_five_2020_zeros_2kmbuff_32618.tif
+  fbd4g_bhs_children_under_five_2020_zeros_32618.tif fbd4g_bhs_children_under_five_2020_zeros_2kmbuff_32618.tif
 
 gdalwarp -overwrite \
   -cutline ../shoreline/coastline_extract_2km_buffer.shp \
   -wo CUTLINE_ALL_TOUCHED=TRUE \
   -co TILED=YES -co COMPRESS=LZW \
-  fbd4g_bhs_elderly_60_plus_2020_zeros_326818.tif fbd4g_bhs_elderly_60_plus_2020_zeros_2kmbuff_32618.tif
+  fbd4g_bhs_elderly_60_plus_2020_zeros_32618.tif fbd4g_bhs_elderly_60_plus_2020_zeros_2kmbuff_32618.tif
  
