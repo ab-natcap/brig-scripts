@@ -13,22 +13,28 @@ from shapely.ops import cascaded_union
 base_dir = '/Users/arbailey/Google Drive/Shared drives/brigBH2021/models/CoastalVulnerability'
 
 # Bahamas-wide with ALL Habitats
-ce_layer = 'baseline_coastal_exposure_Dec2021'  #'coastal_exposure_all_habitat'
-ce_geopackage = 'coastal_exposure'
-cv_workspace = os.path.join(base_dir, 'CV_outputs', 'CV_outputs_Jan2022_WORKING', 'CV_baseline_v2_Dec2021')
-scratch_path = os.path.join(base_dir, 'scratch')
-coastal_exposure_gpkg = "{0}/{1}.gpkg".format(cv_workspace, ce_geopackage)
+# Using Original CV outputs from model
+# ce_layer = 'baseline_coastal_exposure_Dec2021'  #'coastal_exposure_all_habitat'
+# ce_geopackage = 'coastal_exposure'
+# cv_workspace = os.path.join(base_dir, 'CV_outputs', 'CV_outputs_Jan2022_WORKING', 'CV_baseline_v2_Dec2021')
+
+# Using CV layer synthesized by Jess with all habitats and no habitats in MPAs
+ce_layer = "CVoutputs_Dec2021_FINAL_NationalScale"
+ce_shpfile = ce_layer + ".shp"
+cv_workspace = os.path.join(base_dir, 'CV_outputs', 'CV_outputs_Jan2022_WORKING')
+ce_shppath = os.path.join(cv_workspace,ce_shpfile)
+
+# scratch_path = os.path.join(base_dir, 'scratch')
+# coastal_exposure_gpkg = "{0}/{1}.gpkg".format(cv_workspace, ce_geopackage)
 voronoi_gpkg = os.path.join(cv_workspace, 'cv_voronoi.gpkg')
-voronoipoly_path= "{0}/{1}_voronoi.shp".format(cv_workspace,ce_layer)
 voronoiatt_layer= "{0}_voronoi_att".format(ce_layer)
 # Layer to use as the bounding area -- could be a shoreline buffer
 outer_bound_poly = '/Volumes/GoogleDrive/Shared drives/brigBH2021/data/work/shoreline/coastline_extract_2km_buffer.shp'
 # outer_bound_poly = '/Volumes/GoogleDrive/Shared drives/brigBH2021/data/work/bhs_region.shp'
 
-print("input geopackage:", coastal_exposure_gpkg)
+# print("input geopackage:", coastal_exposure_gpkg)
 print("Input Layer: ", ce_layer)
 print("output geopackage", voronoi_gpkg)
-print("Voronoi polygons:", voronoipoly_path)
 print("Voronoi + attribute layer:", voronoiatt_layer)
 print("Outer boundary or buffer region:", outer_bound_poly)
 
@@ -39,7 +45,8 @@ print("Outer boundary or buffer region:", outer_bound_poly)
 # https://github.com/WZBSocialScienceCenter/geovoronoi/blob/master/examples/using_geopandas.py
 
 # Import CV model point data
-cv_points_gdf = gpd.read_file(coastal_exposure_gpkg, layer=ce_layer)
+# cv_points_gdf = gpd.read_file(coastal_exposure_gpkg, layer=ce_layer)
+cv_points_gdf = gpd.read_file(os.path.join(cv_workspace, ce_shpfile))
 crs = cv_points_gdf.crs
 
 # Convert the pandas Series of Point objects to NumPy array of coordinates
@@ -67,4 +74,9 @@ vorpolys = gpd.GeoDataFrame(geometry=gpd.GeoSeries(data=region_polys.values()), 
 print("Joining Voronoi polygons and CV point attributes")
 vor_ce_atts = gpd.sjoin(vorpolys, cv_points_gdf, how='inner', op='contains')
 # Output Vornoi Polygons with CV attributes to Geopackage layer
+print("output: ", voronoi_gpkg, " | ", voronoiatt_layer)
 vor_ce_atts.to_file(voronoi_gpkg, layer=voronoiatt_layer, driver="GPKG")
+
+# Output source CV data to Voronoi Geopackage to have all together
+print("output: ", voronoi_gpkg, " | ", ce_layer)
+cv_points_gdf.to_file(voronoi_gpkg, layer=ce_layer, driver='GPKG')
