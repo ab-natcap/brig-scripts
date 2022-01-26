@@ -104,7 +104,7 @@ mpa_hab_summary.sort_values(by=['mpa_name'], inplace=True)
 
 
 # OUtput MPA habitat Summary stats
-mpahabsummary_file = 'mpa_habitat_summary_20220121.csv'
+mpahabsummary_file = 'mpa_habitat_summary_20220125.csv'
 mpa_hab_summary_csvpath = os.path.join(out_dir,mpahabsummary_file)
 print("Output file with habitat summary by MPA:", mpa_hab_summary_csvpath)
 mpa_hab_summary[['mpa_name', 'bankregion', 'mangmpa_m2', 'seampa_m2']].to_csv(mpa_hab_summary_csvpath, index=False)
@@ -134,24 +134,8 @@ eco_m2.sort_values(by=['bankregion'], inplace=True)
 eco_m2.rename(columns={'bankregion': 'ecoregion'})
 print(eco_m2.head())
 print(eco_m2.columns)
-#
-# eco4.drop(axis=1, labels=['ID', 'geometry'], inplace=True)
-# print(eco4.columns)
-# print(eco4.head())
-# #
-# eco_m2 = eco4.drop(axis=1, labels='bankregion').applymap(lambda x: x*1000000)
-# eco_m2 = eco4.applymap(lambda x: x*1000000)
-# eco_m2['ecoregion'] = eco4['bankregion']
-# eco_m2.columns = ['bank_m2', 'mang_m2', 'sea_m2', 'seampa_m2', 'mangmpa_m2', 'mang_m2_scen', 'sea_m2_scen', 'ecoregion']
-# eco_m2 = eco_m2[['ecoregion', 'bank_m2', 'mang_m2', 'sea_m2', 'seampa_m2', 'mangmpa_m2', 'mang_m2_scen', 'sea_m2_scen']]
-# eco_m2['sea_change'] = (eco_m2.sea_m2_scen - eco_m2.sea_m2)/eco_m2.sea_m2
-# eco_m2['mang_change'] = (eco_m2.mang_m2_scen - eco_m2.mang_m2)/eco_m2.mang_m2
-# eco_m2.fillna(0, inplace=True)
-# eco_m2.sort_values('ecoregion')
-# print(eco_m2.head())
-#
 
-lobsterhabscenario_file = 'lobsterhabitat_scenariodata_20220121.csv'
+lobsterhabscenario_file = 'lobsterhabitat_scenariodata_20220125.csv'
 lobster_hab_scenario_csvpath = os.path.join(out_dir, lobsterhabscenario_file)
 print("Output file with lobster habitat scenario by ecoregion:", lobster_hab_scenario_csvpath)
 eco_m2.to_csv(lobster_hab_scenario_csvpath, index=False)
