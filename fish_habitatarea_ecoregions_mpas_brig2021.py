@@ -21,7 +21,9 @@ out_dir =  '/Users/arbailey/Google Drive/Shared drives/brigBH2021/models/Fisheri
 ### --- zonal stats for seagrass area calcs - within 1km of coast
 
 ecoregion_shp_path = os.path.join(base_dir,'eco_shelves_1kmcoast.shp')
-mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_1kmcoast_2022_expandednetwork.shp')
+# mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_1kmcoast_2022_expandednetwork.shp')
+mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_1kmcoast_2021.shp') # Original MPA network (2021 Fall)
+
 sg_raster_path = os.path.join(base_dir,'seagrass.tif')
 sg_resln = 20 # 0.02 # (20 m)
 
@@ -64,7 +66,9 @@ mpasea_area_byregion.reset_index(inplace=True)
 # gdal_rasterize -burn 1 -a_nodata -9999 -tr 30.0 30.0 -l Mangrove Mangrove.shp Mangrove.tif
 
 ecoregion_shp_path = os.path.join(base_dir,'eco_shelves_250mcoast.shp')
-mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_250mcoast_2022_expandednetwork.shp')
+# mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_250mcoast_2022_expandednetwork.shp')
+mpas_region_shp_path = os.path.join(base_dir,'mpas_inshelf_250mcoast_2021.shp') # Orginal MPA network
+
 mang_raster_path = os.path.join(base_dir,'Mangrove.tif')
 mang_resln = 30 # 0.03 # (30 m)
 
@@ -104,7 +108,7 @@ mpa_hab_summary.sort_values(by=['mpa_name'], inplace=True)
 
 
 # OUtput MPA habitat Summary stats
-mpahabsummary_file = 'mpa_habitat_summary_20220125.csv'
+mpahabsummary_file = 'mpa_habitat_summary_20220208_originalMPAnetwork.csv'
 mpa_hab_summary_csvpath = os.path.join(out_dir,mpahabsummary_file)
 print("Output file with habitat summary by MPA:", mpa_hab_summary_csvpath)
 mpa_hab_summary[['mpa_name', 'bankregion', 'mangmpa_m2', 'seampa_m2']].to_csv(mpa_hab_summary_csvpath, index=False)
@@ -135,7 +139,7 @@ eco_m2.rename(columns={'bankregion': 'ecoregion'})
 print(eco_m2.head())
 print(eco_m2.columns)
 
-lobsterhabscenario_file = 'lobsterhabitat_scenariodata_20220125.csv'
+lobsterhabscenario_file = 'lobsterhabitat_scenariodata_20220208_originalMPAnetwork.csv'
 lobster_hab_scenario_csvpath = os.path.join(out_dir, lobsterhabscenario_file)
 print("Output file with lobster habitat scenario by ecoregion:", lobster_hab_scenario_csvpath)
 eco_m2.to_csv(lobster_hab_scenario_csvpath, index=False)
