@@ -60,9 +60,12 @@ if __name__ == "__main__":
     cv_pt = gpd.read_file(voronoi_gpkg, layer=ce_layer)
 
     pop_dir = os.path.join(base_dir, 'CVinputs_working', 'pop')
+    # Facebook Data 4 Good
     fbd4g_general = os.path.join(pop_dir, 'fbd4g_bhs_general_2020_zeros_32618.tif')
     fbd4g_over60 = os.path.join(pop_dir, 'fbd4g_bhs_elderly_60_plus_2020_zeros_32618.tif')
     fbd4g_under05 = os.path.join(pop_dir, 'fbd4g_bhs_children_under_five_2020_zeros_32618.tif')
+    # World Pop Constrained People Per Pixel (2020)
+    wp_con_ppp = os.path.join(pop_dir, 'bhs_ppp_2020_UNadj_constrained_zeros_32618.tif')
 
     print("Zonal Stats with ", fbd4g_general)
     fbd4g_all_df = zonal_pop_stats(cv_poly, fbd4g_general, 'fbpop_all', 'sum')
@@ -70,11 +73,18 @@ if __name__ == "__main__":
     fbd4g_over60_df = zonal_pop_stats(cv_poly, fbd4g_over60, 'fbpop_ov60', 'sum')
     print("Zonal Stats with ", fbd4g_under05)
     fbd4g_under05_df = zonal_pop_stats(cv_poly, fbd4g_under05, 'fbpop_und5', 'sum')
+    print("Zonal Stats with ", wp_con_ppp)
+    wp_con_ppp_df = zonal_pop_stats(cv_poly, wp_con_ppp, 'wppop_all', 'sum')
 
     print(fbd4g_all_df)
 
     print("Combining outputs")
-    metrics = pd.concat([fbd4g_all_df, fbd4g_over60_df.iloc[:,-1:], fbd4g_under05_df.iloc[:,-1:]], axis=1)
+    metrics = pd.concat([fbd4g_all_df,
+                         fbd4g_over60_df.iloc[:,-1:],
+                         fbd4g_under05_df.iloc[:,-1:],
+                         wp_con_ppp_df.iloc[:,-1:],
+                         ],
+                        axis=1)
 
     print(metrics)
     print(metrics.describe())
@@ -83,6 +93,7 @@ if __name__ == "__main__":
     vornoi_pop_gdf = cv_poly.merge(metrics, on='shore_id')
     print("Combining cv points with population metrics")
     cv_pop_gdf = cv_pt.merge(metrics, on='shore_id')
+    print(cv_pop_gdf)
 
     # Export
     voronoipop_layer = "{0}_voronoi_pop".format(ce_layer)
